@@ -48,8 +48,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0EB0AED5-18C8-4339-A875-E48FAF5A3D8A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>basicOscServer</RootNamespace>
-    <ProjectName>basicOscServer</ProjectName>
+    <RootNamespace>BasicOscServer</RootNamespace>
+    <ProjectName>BasicOscServer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
