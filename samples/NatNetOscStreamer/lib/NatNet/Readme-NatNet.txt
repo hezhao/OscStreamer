@@ -9,9 +9,52 @@ Please refer to the NatNet API USer's Guide for more information.
 
 Change Log
 -----------
+Version 2.8.0 (4/15/2015)
+-----------------------
+
+* Note to Direct Depackatization Clients : No bitstream syntax change from 2.7.0 to 2.8.0
+
+Added:   Motive 1.8 streaming support
+
+Added:   New MATLAB wrapper sample.
+
+Added:   Add playback range and looping commands ("SetPlaybackStartFrame,frameNumber","SetPlaybackStopFrame,frameNumber","SetPlaybackLooping,0or1")
+         to NatNet command list, update NatNet SDK Winforms and PacketClient samples to illustrate usage.
+
+Added:   Add DecodeID() helper routine, illustrate usage in Winforms and SampleClient apps for decoding legacy marker id
+         into modelID, markerID pairs.
+
+Fixed:   Fix for PointCloud solved bit indcator.
+
+Added:   Updated Unity3D streaming sample to stream rigid bodies and skeletons.
+
+Added:   Add Z-up quaternion to euler decoding example to WinForms sample when streaming Z-UP from Motive.
+
+Added:   Add support and examples for explicitly disconnecting unicast clients.
+
+Added:   Add support for Z-Up streaming, update SampleClient 3D to illustrate usage
+
+Changed: (NatNet Managed Library (NatNetML) only) Change GetLastFrameOfData() routine  in managed client to lock the frame
+         and return a copy of the data (polling clients only), update WinForms sample app to illustrate usage. 
+
+Changed: (NatNet Managed Library (NatNetML) only) Provide copy constructors to simplify .NET client data deep copy operations,
+         update Winforms sample with data copy operation.
+
+Changed: (NatNet Managed Library (NatNetML) only) Fix graphing for correct frame aligmnment for Motive.
+
+Changed: (NatNet Managed Library (NatNetML) only) Add timing testing operations and reporting.
+
+Fixed:   Fix for Debug x64 WinformsSample not compiling out of the box.
+
+Fixed:   Fix for RigidBody tracked flag in managed clients.
+
+
 Version 2.7.0 (10/15/2014)
 -----------------------
-Added:   Motive 1.7 Streaming support
+
+* Note to Direct Depackatization Clients : bitstream syntax changed from 2.6.0 to 2.7.0 (see below for details)
+
+Added:   Motive 1.7 streaming support
 
 Added:   New timing sample for validating mocap streaming frame timing.
 
@@ -26,7 +69,7 @@ Fixed:   Fix for PacketClient incorrectly decoding rigid Body IsTracked paramete
 
 Fixed:   Fix for crash in GetDataDescriptions() when streaming a Rigid Body with a single character name.
 
-Fixed:   Sample Clint incorrectly reports skeleton marker data
+Fixed:   Sample Client incorrectly reports skeleton marker data
 
 Changed: Update SampleClient3D to clarify quaterion decomposition, add new visuals.
 
@@ -36,7 +79,7 @@ Changed: Maximum markers per rigid body changed from 10 to 20 to match new Rigid
 Changed: Frame timestamp now keyed off hardware frame id.  fTimestamp resolution increased
          from float to double *.  
          
-         * DirectDepackatization clients should update their code (see timestamp in PacketClient.cpp for an example).
+* DirectDepackatization clients should update their code (see timestamp in PacketClient.cpp for an example).
 
          
 Version 2.6.0 (5/8/2014)

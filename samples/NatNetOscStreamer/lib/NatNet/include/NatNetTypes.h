@@ -2,7 +2,7 @@
 NatNetTypes defines the public, common data structures and types
 used when working with NatNetServer and NatNetClient objects.
 
-version 2.7.0.0
+version 2.8.0.0
 */
 
 #pragma once
@@ -43,6 +43,7 @@ version 2.7.0.0
 #define NAT_REQUEST_FRAMEOFDATA     6
 #define NAT_FRAMEOFDATA             7
 #define NAT_MESSAGESTRING           8
+#define NAT_DISCONNECT              9 
 #define NAT_UNRECOGNIZED_REQUEST    100
 
 #define UNDEFINED                   999999.9999

@@ -7,10 +7,10 @@ to a LocalIP default to local machine, and then redirects data to client(s) on t
 
 Usage [optional]:
 
-	NatNetOSC [ServerIP] [LocalIP] [OutputFilename]
+    NatNetOSC [ServerIP] [LocalIP] [OutputFilename]
 
-	[ServerIP]			IP address of the server (e.g. 192.168.0.107) ( defaults to local machine)
-	[OutputFilename]	Name of points file (pts) to write out.  defaults to Client-output.pts
+    [ServerIP]          IP address of the server (e.g. 192.168.0.107) ( defaults to local machine)
+    [OutputFilename]    Name of points file (pts) to write out.  defaults to Client-output.pts
 */
 
 #include <stdio.h>
@@ -29,8 +29,8 @@ Usage [optional]:
 void _WriteHeader(FILE* fp, sDataDescriptions* pBodyDefs);
 void _WriteFrame(FILE* fp, sFrameOfMocapData* data);
 void _WriteFooter(FILE* fp);
-void __cdecl DataHandler(sFrameOfMocapData* data, void* pUserData);		// receives data from the server
-void __cdecl MessageHandler(int msgType, char* msg);		            // receives NatNet error mesages
+void __cdecl DataHandler(sFrameOfMocapData* data, void* pUserData);     // receives data from the server
+void __cdecl MessageHandler(int msgType, char* msg);                    // receives NatNet error mesages
 void resetClient();
 int CreateClient(int iConnectionType);
 
@@ -53,17 +53,17 @@ int _tmain(int argc, _TCHAR* argv[])
     // parse command line args
     if(argc>1)
     {
-        strcpy(szServerIPAddress, argv[1]);	// specified on command line
+        strcpy(szServerIPAddress, argv[1]); // specified on command line
         printf("Connecting to server at %s...\n", szServerIPAddress);
     }
     else
     {
-        strcpy(szServerIPAddress, "");		// not specified - assume server is local machine
+        strcpy(szServerIPAddress, "");      // not specified - assume server is local machine
         printf("Connecting to server at LocalMachine\n");
     }
     if(argc>2)
     {
-        strcpy(szMyIPAddress, argv[2]);	    // specified on command line
+        strcpy(szMyIPAddress, argv[2]);     // specified on command line
         printf("Connecting from %s...\n", szMyIPAddress);
     }
     else
@@ -72,9 +72,9 @@ int _tmain(int argc, _TCHAR* argv[])
         printf("Connecting from LocalMachine...\n");
     }
 
-	// Create OSC Streamer
-	oscStreamer = new OscStreamer();
-	oscStreamer->init();
+    // Create OSC Streamer
+    oscStreamer = new OscStreamer();
+    oscStreamer->init();
 
     // Create NatNet Client
     iResult = CreateClient(iConnectionType);
@@ -88,26 +88,26 @@ int _tmain(int argc, _TCHAR* argv[])
         printf("Client initialized and ready.\n");
     }
 
-	// send/receive test request
-	printf("[NatNetOSC] Sending Test Request\n");
-	void* response;
-	int nBytes;
-	iResult = theClient->SendMessageAndWait("TestRequest", &response, &nBytes);
-	if (iResult == ErrorCode_OK)
-	{
-		printf("[NatNetOSC] Received: %s", (char*)response);
-	}
+    // send/receive test request
+    printf("[NatNetOSC] Sending Test Request\n");
+    void* response;
+    int nBytes;
+    iResult = theClient->SendMessageAndWait("TestRequest", &response, &nBytes);
+    if (iResult == ErrorCode_OK)
+    {
+        printf("[NatNetOSC] Received: %s", (char*)response);
+    }
 
-	// Retrieve Data Descriptions from server
-	printf("\n\n[NatNetOSC] Requesting Data Descriptions...");
-	sDataDescriptions* pDataDefs = NULL;
-	int nBodies = theClient->GetDataDescriptions(&pDataDefs);
-	if(!pDataDefs)
-	{
-		printf("[NatNetOSC] Unable to retrieve Data Descriptions.");
-	}
-	else
-	{
+    // Retrieve Data Descriptions from server
+    printf("\n\n[NatNetOSC] Requesting Data Descriptions...");
+    sDataDescriptions* pDataDefs = NULL;
+    int nBodies = theClient->GetDataDescriptions(&pDataDefs);
+    if(!pDataDefs)
+    {
+        printf("[NatNetOSC] Unable to retrieve Data Descriptions.");
+    }
+    else
+    {
         printf("[NatNetOSC] Received %d Data Descriptions:\n", pDataDefs->nDataDescriptions );
         for(int i=0; i < pDataDefs->nDataDescriptions; i++)
         {
@@ -152,40 +152,40 @@ int _tmain(int argc, _TCHAR* argv[])
                 // Unknown
             }
         }      
-	}
+    }
 
-	
-	//// Create data file for writing received stream into
-	//char szFile[MAX_PATH];
-	//char szFolder[MAX_PATH];
-	//GetCurrentDirectory(MAX_PATH, szFolder);
-	//if(argc > 3)
-	//	sprintf(szFile, "%s\\%s", szFolder, argv[3]);
-	//else
-	//	sprintf(szFile, "%s\\Client-output.pts",szFolder);
-	//fp = fopen(szFile, "w");
-	//if(!fp)
-	//{
-	//	printf("error opening output file %s.  Exiting.", szFile);
-	//	exit(1);
-	//}
-	//if(pDataDefs)
-	//	_WriteHeader(fp, pDataDefs);
+    
+    //// Create data file for writing received stream into
+    //char szFile[MAX_PATH];
+    //char szFolder[MAX_PATH];
+    //GetCurrentDirectory(MAX_PATH, szFolder);
+    //if(argc > 3)
+    //  sprintf(szFile, "%s\\%s", szFolder, argv[3]);
+    //else
+    //  sprintf(szFile, "%s\\Client-output.pts",szFolder);
+    //fp = fopen(szFile, "w");
+    //if(!fp)
+    //{
+    //  printf("error opening output file %s.  Exiting.", szFile);
+    //  exit(1);
+    //}
+    //if(pDataDefs)
+    //  _WriteHeader(fp, pDataDefs);
 
-	// Ready to receive marker stream!
-	printf("\nClient is connected to server and listening for data...\n");
-	int c;
-	bool bExit = false;
-	while(c =_getch())
-	{
-		switch(c)
-		{
-			case 'q':
-				bExit = true;		
-				break;	
-			case 'r':
-				resetClient();
-				break;	
+    // Ready to receive marker stream!
+    printf("\nClient is connected to server and listening for data...\n");
+    int c;
+    bool bExit = false;
+    while(c =_getch())
+    {
+        switch(c)
+        {
+            case 'q':
+                bExit = true;       
+                break;  
+            case 'r':
+                resetClient();
+                break;  
             case 'p':
                 sServerDescription ServerDescription;
                 memset(&ServerDescription, 0, sizeof(ServerDescription));
@@ -195,21 +195,21 @@ int _tmain(int argc, _TCHAR* argv[])
                     printf("Unable to connect to server. Host not present. Exiting.");
                     return 1;
                 }
-                break;	
+                break;  
             case 'f':
                 {
                     sFrameOfMocapData* pData = theClient->GetLastFrameOfData();
                     printf("Most Recent Frame: %d", pData->iFrame);
                 }
-                break;	
-            case 'm':	                        // change to multicast
+                break;  
+            case 'm':                           // change to multicast
                 iResult = CreateClient(ConnectionType_Multicast);
                 if(iResult == ErrorCode_OK)
                     printf("Client connection type changed to Multicast.\n\n");
                 else
                     printf("Error changing client connection type to Multicast.\n\n");
                 break;
-            case 'u':	                        // change to unicast
+            case 'u':                           // change to unicast
                 iResult = CreateClient(ConnectionType_Unicast);
                 if(iResult == ErrorCode_OK)
                     printf("Client connection type changed to Unicast.\n\n");
@@ -218,23 +218,23 @@ int _tmain(int argc, _TCHAR* argv[])
                 break;
 
 
-			default:
-				break;
-		}
-		if(bExit)
-			break;
-	}
+            default:
+                break;
+        }
+        if(bExit)
+            break;
+    }
 
-	// Done - clean up.
-	theClient->Uninitialize();
-	if (fp)
-	{
-		_WriteFooter(fp);
-		fclose(fp);
-	}
-	delete oscStreamer;
+    // Done - clean up.
+    theClient->Uninitialize();
+    if (fp)
+    {
+        _WriteFooter(fp);
+        fclose(fp);
+    }
+    delete oscStreamer;
 
-	return ErrorCode_OK;
+    return ErrorCode_OK;
 }
 
 // Establish a NatNet Client connection
@@ -261,7 +261,7 @@ int CreateClient(int iConnectionType)
     // Set callback handlers
     theClient->SetMessageCallback(MessageHandler);
     theClient->SetVerbosityLevel(Verbosity_Debug);
-    theClient->SetDataCallback( DataHandler, theClient );	// this function will receive data from the server
+    theClient->SetDataCallback( DataHandler, theClient );   // this function will receive data from the server
 
     // Init Client and connect to NatNet server
     // to use NatNet default port assigments
@@ -301,73 +301,73 @@ int CreateClient(int iConnectionType)
 // DataHandler receives data from the server
 void __cdecl DataHandler(sFrameOfMocapData* data, void* pUserData)
 {
-	NatNetClient* pClient = (NatNetClient*) pUserData;
+    NatNetClient* pClient = (NatNetClient*) pUserData;
 
-	// printf("Received frame %d\n", data->iFrame);
+    // printf("Received frame %d\n", data->iFrame);
 
-	if(fp)
-		_WriteFrame(fp,data);
-	int i=0;
+    if(fp)
+        _WriteFrame(fp,data);
+    int i=0;
 
     printf("FrameID : %d\n", data->iFrame);
     printf("Timestamp :  %3.2lf\n", data->fTimestamp);
     printf("Latency :  %3.2lf\n", data->fLatency);
     
     // FrameOfMocapData params
-    bool bIsRecording = data->params & 0x01;
-    bool bTrackedModelsChanged = data->params & 0x02;
+    bool bIsRecording = ((data->params & 0x01)!=0);
+    bool bTrackedModelsChanged = ((data->params & 0x02)!=0);
     if(bIsRecording)
         printf("RECORDING\n");
     if(bTrackedModelsChanged)
         printf("Models Changed.\n");
 
 
-	// timecode
-	// decode to values
-	int hour, minute, second, frame, subframe;
-	bool bValid = pClient->DecodeTimecode(data->Timecode, data->TimecodeSubframe, &hour, &minute, &second, &frame, &subframe);
-	// decode to friendly string
-	char szTimecode[128] = "";
-	pClient->TimecodeStringify(data->Timecode, data->TimecodeSubframe, szTimecode, 128);
-	printf("Timecode : %s\n", szTimecode);
+    // timecode
+    // decode to values
+    int hour, minute, second, frame, subframe;
+    bool bValid = pClient->DecodeTimecode(data->Timecode, data->TimecodeSubframe, &hour, &minute, &second, &frame, &subframe);
+    // decode to friendly string
+    char szTimecode[128] = "";
+    pClient->TimecodeStringify(data->Timecode, data->TimecodeSubframe, szTimecode, 128);
+    printf("Timecode : %s\n", szTimecode);
 
-	// Other Markers
-	printf("Other Markers [Count=%d]\n", data->nOtherMarkers);
-	for(i=0; i < data->nOtherMarkers; i++)
-	{
-		printf("Other Marker %d : %3.2f\t%3.2f\t%3.2f\n",
-			i,
-			data->OtherMarkers[i][0],
-			data->OtherMarkers[i][1],
-			data->OtherMarkers[i][2]);
-	}
+    // Other Markers
+    printf("Other Markers [Count=%d]\n", data->nOtherMarkers);
+    for(i=0; i < data->nOtherMarkers; i++)
+    {
+        printf("Other Marker %d : %3.2f\t%3.2f\t%3.2f\n",
+            i,
+            data->OtherMarkers[i][0],
+            data->OtherMarkers[i][1],
+            data->OtherMarkers[i][2]);
+    }
 
-	// Rigid Bodies
-	printf("Rigid Bodies [Count=%d]\n", data->nRigidBodies);
-	for(i=0; i < data->nRigidBodies; i++)
-	{
-		// rigid body tracking status
+    // Rigid Bodies
+    printf("Rigid Bodies [Count=%d]\n", data->nRigidBodies);
+    for(i=0; i < data->nRigidBodies; i++)
+    {
+        // rigid body tracking status
         // 0x01 : bool, rigid body was successfully tracked in this frame
-		int bTrackingValid = int(data->RigidBodies[i].params & 0x01);
+        int bTrackingValid = int(data->RigidBodies[i].params & 0x01);
 
-		oscStreamer->send( data->RigidBodies[i].ID, bTrackingValid, data->RigidBodies[i].x, data->RigidBodies[i].y, data->RigidBodies[i].z, 
-			data->RigidBodies[i].qx, data->RigidBodies[i].qy, data->RigidBodies[i].qz, data->RigidBodies[i].qw );
+        oscStreamer->send( data->RigidBodies[i].ID, bTrackingValid, data->RigidBodies[i].x, data->RigidBodies[i].y, data->RigidBodies[i].z, 
+            data->RigidBodies[i].qx, data->RigidBodies[i].qy, data->RigidBodies[i].qz, data->RigidBodies[i].qw );
 
-		printf("------------------------------------------------\n");
-		printf("Rigid Body [ID=%d  Error=%3.2f Valid=%d]\n", data->RigidBodies[i].ID, data->RigidBodies[i].MeanError, bTrackingValid);
-		printf("\tx\ty\tz\tqx\tqy\tqz\tqw\n");
-		printf("\t%3.3f\t%3.3f\t%3.3f\t%3.3f\t%3.3f\t%3.3f\t%3.3f\n",
-			data->RigidBodies[i].x,
-			data->RigidBodies[i].y,
-			data->RigidBodies[i].z,
-			data->RigidBodies[i].qx,
-			data->RigidBodies[i].qy,
-			data->RigidBodies[i].qz,
-			data->RigidBodies[i].qw);
+        printf("------------------------------------------------\n");
+        printf("Rigid Body [ID=%d  Error=%3.2f Valid=%d]\n", data->RigidBodies[i].ID, data->RigidBodies[i].MeanError, bTrackingValid);
+        printf("\tx\ty\tz\tqx\tqy\tqz\tqw\n");
+        printf("\t%3.3f\t%3.3f\t%3.3f\t%3.3f\t%3.3f\t%3.3f\t%3.3f\n",
+            data->RigidBodies[i].x,
+            data->RigidBodies[i].y,
+            data->RigidBodies[i].z,
+            data->RigidBodies[i].qx,
+            data->RigidBodies[i].qy,
+            data->RigidBodies[i].qz,
+            data->RigidBodies[i].qw);
 
-		//printf("\tRigid body markers [Count=%d]\n", data->RigidBodies[i].nMarkers);
-		//for(int iMarker=0; iMarker < data->RigidBodies[i].nMarkers; iMarker++)
-		//{
+        //printf("\tRigid body markers [Count=%d]\n", data->RigidBodies[i].nMarkers);
+        //for(int iMarker=0; iMarker < data->RigidBodies[i].nMarkers; iMarker++)
+        //{
   //          printf("\t\t");
   //          if(data->RigidBodies[i].MarkerIDs)
   //              printf("MarkerID:%d", data->RigidBodies[i].MarkerIDs[iMarker]);
@@ -379,117 +379,117 @@ void __cdecl DataHandler(sFrameOfMocapData* data, void* pUserData)
   //                  data->RigidBodies[i].Markers[iMarker][1],
   //                  data->RigidBodies[i].Markers[iMarker][2]);
   //      }
-	}
+    }
 
-	//// skeletons
-	//printf("Skeletons [Count=%d]\n", data->nSkeletons);
-	//for(i=0; i < data->nSkeletons; i++)
-	//{
-	//	sSkeletonData skData = data->Skeletons[i];
-	//	printf("Skeleton [ID=%d  Bone count=%d]\n", skData.skeletonID, skData.nRigidBodies);
-	//	for(int j=0; j< skData.nRigidBodies; j++)
-	//	{
-	//		sRigidBodyData rbData = skData.RigidBodyData[j];
-	//		printf("Bone %d\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\n",
-	//			rbData.ID, rbData.x, rbData.y, rbData.z, rbData.qx, rbData.qy, rbData.qz, rbData.qw );
+    //// skeletons
+    //printf("Skeletons [Count=%d]\n", data->nSkeletons);
+    //for(i=0; i < data->nSkeletons; i++)
+    //{
+    //  sSkeletonData skData = data->Skeletons[i];
+    //  printf("Skeleton [ID=%d  Bone count=%d]\n", skData.skeletonID, skData.nRigidBodies);
+    //  for(int j=0; j< skData.nRigidBodies; j++)
+    //  {
+    //      sRigidBodyData rbData = skData.RigidBodyData[j];
+    //      printf("Bone %d\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\n",
+    //          rbData.ID, rbData.x, rbData.y, rbData.z, rbData.qx, rbData.qy, rbData.qz, rbData.qw );
 
-	//		printf("\tRigid body markers [Count=%d]\n", rbData.nMarkers);
-	//		for(int iMarker=0; iMarker < rbData.nMarkers; iMarker++)
-	//		{
-	//			printf("\t\t");
-	//			if(rbData.MarkerIDs)
-	//				printf("MarkerID:%d", rbData.MarkerIDs[iMarker]);
-	//			if(rbData.MarkerSizes)
-	//				printf("\tMarkerSize:%3.2f", rbData.MarkerSizes[iMarker]);
-	//			if(rbData.Markers)
-	//				printf("\tMarkerPos:%3.2f,%3.2f,%3.2f\n" ,
-	//				data->RigidBodies[i].Markers[iMarker][0],
-	//				data->RigidBodies[i].Markers[iMarker][1],
-	//				data->RigidBodies[i].Markers[iMarker][2]);
-	//		}
-	//	}
-	//}
+    //      printf("\tRigid body markers [Count=%d]\n", rbData.nMarkers);
+    //      for(int iMarker=0; iMarker < rbData.nMarkers; iMarker++)
+    //      {
+    //          printf("\t\t");
+    //          if(rbData.MarkerIDs)
+    //              printf("MarkerID:%d", rbData.MarkerIDs[iMarker]);
+    //          if(rbData.MarkerSizes)
+    //              printf("\tMarkerSize:%3.2f", rbData.MarkerSizes[iMarker]);
+    //          if(rbData.Markers)
+    //              printf("\tMarkerPos:%3.2f,%3.2f,%3.2f\n" ,
+    //              data->RigidBodies[i].Markers[iMarker][0],
+    //              data->RigidBodies[i].Markers[iMarker][1],
+    //              data->RigidBodies[i].Markers[iMarker][2]);
+    //      }
+    //  }
+    //}
 
-	//// labeled markers
+    //// labeled markers
  //   bool bOccluded;     // marker was not visible (occluded) in this frame
  //   bool bPCSolved;     // reported position provided by point cloud solve
  //   bool bModelSolved;  // reported position provided by model solve
-	//printf("Labeled Markers [Count=%d]\n", data->nLabeledMarkers);
-	//for(i=0; i < data->nLabeledMarkers; i++)
-	//{
+    //printf("Labeled Markers [Count=%d]\n", data->nLabeledMarkers);
+    //for(i=0; i < data->nLabeledMarkers; i++)
+    //{
  //       bOccluded = data->LabeledMarkers[i].params & 0x01;
  //       bPCSolved = data->LabeledMarkers[i].params & 0x02;
  //       bModelSolved = data->LabeledMarkers[i].params & 0x04;
-	//	sMarker marker = data->LabeledMarkers[i];
-	//	printf("Labeled Marker [ID=%d, Occluded=%d, PCSolved=%d, ModelSolved=%d] [size=%3.2f] [pos=%3.2f,%3.2f,%3.2f]\n",
+    //  sMarker marker = data->LabeledMarkers[i];
+    //  printf("Labeled Marker [ID=%d, Occluded=%d, PCSolved=%d, ModelSolved=%d] [size=%3.2f] [pos=%3.2f,%3.2f,%3.2f]\n",
  //           marker.ID, bOccluded, bPCSolved, bModelSolved,  marker.size, marker.x, marker.y, marker.z);
-	//}
+    //}
 
 }
 
 // MessageHandler receives NatNet error/debug messages
 void __cdecl MessageHandler(int msgType, char* msg)
 {
-	printf("\n%s\n", msg);
+    printf("\n%s\n", msg);
 }
 
 /* File writing routines */
 void _WriteHeader(FILE* fp, sDataDescriptions* pBodyDefs)
 {
-	int i=0;
+    int i=0;
 
     if(!pBodyDefs->arrDataDescriptions[0].type == Descriptor_MarkerSet)
         return;
         
-	sMarkerSetDescription* pMS = pBodyDefs->arrDataDescriptions[0].Data.MarkerSetDescription;
+    sMarkerSetDescription* pMS = pBodyDefs->arrDataDescriptions[0].Data.MarkerSetDescription;
 
-	fprintf(fp, "<MarkerSet>\n\n");
-	fprintf(fp, "<Name>\n%s\n</Name>\n\n", pMS->szName);
+    fprintf(fp, "<MarkerSet>\n\n");
+    fprintf(fp, "<Name>\n%s\n</Name>\n\n", pMS->szName);
 
-	fprintf(fp, "<Markers>\n");
-	for(i=0; i < pMS->nMarkers; i++)
-	{
-		fprintf(fp, "%s\n", pMS->szMarkerNames[i]);
-	}
-	fprintf(fp, "</Markers>\n\n");
+    fprintf(fp, "<Markers>\n");
+    for(i=0; i < pMS->nMarkers; i++)
+    {
+        fprintf(fp, "%s\n", pMS->szMarkerNames[i]);
+    }
+    fprintf(fp, "</Markers>\n\n");
 
-	fprintf(fp, "<Data>\n");
-	fprintf(fp, "Frame#\t");
-	for(i=0; i < pMS->nMarkers; i++)
-	{
-		fprintf(fp, "M%dX\tM%dY\tM%dZ\t", i, i, i);
-	}
-	fprintf(fp,"\n");
+    fprintf(fp, "<Data>\n");
+    fprintf(fp, "Frame#\t");
+    for(i=0; i < pMS->nMarkers; i++)
+    {
+        fprintf(fp, "M%dX\tM%dY\tM%dZ\t", i, i, i);
+    }
+    fprintf(fp,"\n");
 
 }
 
 void _WriteFrame(FILE* fp, sFrameOfMocapData* data)
 {
-	fprintf(fp, "%d", data->iFrame);
-	for(int i =0; i < data->MocapData->nMarkers; i++)
-	{
-		fprintf(fp, "\t%.5f\t%.5f\t%.5f", data->MocapData->Markers[i][0], data->MocapData->Markers[i][1], data->MocapData->Markers[i][2]);
-	}
-	fprintf(fp, "\n");
+    fprintf(fp, "%d", data->iFrame);
+    for(int i =0; i < data->MocapData->nMarkers; i++)
+    {
+        fprintf(fp, "\t%.5f\t%.5f\t%.5f", data->MocapData->Markers[i][0], data->MocapData->Markers[i][1], data->MocapData->Markers[i][2]);
+    }
+    fprintf(fp, "\n");
 }
 
 void _WriteFooter(FILE* fp)
 {
-	fprintf(fp, "</Data>\n\n");
-	fprintf(fp, "</MarkerSet>\n");
+    fprintf(fp, "</Data>\n\n");
+    fprintf(fp, "</MarkerSet>\n");
 }
 
 void resetClient()
 {
-	int iSuccess;
+    int iSuccess;
 
-	printf("\n\nre-setting Client\n\n.");
+    printf("\n\nre-setting Client\n\n.");
 
-	iSuccess = theClient->Uninitialize();
-	if(iSuccess != 0)
-		printf("error un-initting Client\n");
+    iSuccess = theClient->Uninitialize();
+    if(iSuccess != 0)
+        printf("error un-initting Client\n");
 
-	iSuccess = theClient->Initialize(szMyIPAddress, szServerIPAddress);
-	if(iSuccess != 0)
-		printf("error re-initting Client\n");
+    iSuccess = theClient->Initialize(szMyIPAddress, szServerIPAddress);
+    if(iSuccess != 0)
+        printf("error re-initting Client\n");
 }
