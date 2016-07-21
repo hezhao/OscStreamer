@@ -73,7 +73,7 @@ int _tmain(int argc, _TCHAR* argv[])
     }
 
     // Create OSC Streamer
-    oscStreamer = new OscStreamer();
+    oscStreamer = new OscStreamer(szMyIPAddress);
     oscStreamer->init();
 
     // Create NatNet Client
