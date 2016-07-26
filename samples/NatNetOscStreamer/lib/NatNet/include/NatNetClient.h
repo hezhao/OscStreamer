@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "NatNetTypes.h"
+
 class ClientCore;
 
 // Data callback function prototype
@@ -39,6 +41,9 @@ public:
     bool DecodeTimecode(unsigned int inTimecode, unsigned int inTimecodeSubframe, int* hour, int* minute, int* second, int* frame, int* subframe);
     bool TimecodeStringify(unsigned int inTimecode, unsigned int inTimecodeSubframe, char *Buffer, int BufferSize);
     void DecodeID(unsigned int inID, int* entityID, int* memeberID);
+
+    void CopyFrame(sFrameOfMocapData* pSrc, sFrameOfMocapData* pDst);
+    void FreeFrame(sFrameOfMocapData* pFrame);
 
 private:
 

@@ -6,13 +6,46 @@ with either multicasting or point-to-point unicasting for transmitting data.
 
 Please refer to the NatNet API USer's Guide for more information.
 
-
 Change Log
 -----------
+Version 2.10.0 (06/15/2016)
+-----------------------
+
+Fixed: Issue where WinFormsTestApp crashed on exit.
+
+Fixed: Issue where WinFormsTestApp became non-responsive after selecting multiple items.
+
+Updated: The User Guide to include new information and correct formatting / grammatical errors.
+
+Added: NatNet Unity3D sample code for skeleton re-targeting using Mecanim.
+
+Added: NatNet Python depacketization client into NatNet SDK Samples directory.
+
+Added: Reference to open source NatNet based Maya plug in.
+
+Added: A 'keep alive' streaming command to resolve issues with UDP unicast clients going to sleep.
+
+
+Version 2.9.0 (10/11/2015)
+-----------------------
+
+* Note to Direct Depackatization Clients : Bitstream syntax change in Motive 1.9 (NatNet v2.9).  Please see PacketClient.cpp for example.
+
+Added:   Motive 1.9 streaming support.
+
+Added:   Stream ID of unlabeled markers over NatNet.  Please refer to updated Winforms sample to show new unlabeled marker data access.
+
+Added:   Add Force Plate information to data descriptions and FrameOfMocapData structure.  ( Bitstream syntax change)
+
+Fixed:   (NatNet Managed Library (NatNetML) only)  Update NatNetML with marker parameter data (e.g. occluded flag)
+
+Added:   (NatNet Managed Library (NatNetML) only)  Update Winforms sample to illustrate data polliing as an alternative to data callback.
+
+
 Version 2.8.0 (4/15/2015)
 -----------------------
 
-* Note to Direct Depackatization Clients : No bitstream syntax change from 2.7.0 to 2.8.0
+* Note to Direct Depackatization Clients : No bitstream syntax change from Motive 2.7 to Motive 1.8 (NatNet v2.8)
 
 Added:   Motive 1.8 streaming support
 
@@ -52,7 +85,7 @@ Fixed:   Fix for RigidBody tracked flag in managed clients.
 Version 2.7.0 (10/15/2014)
 -----------------------
 
-* Note to Direct Depackatization Clients : bitstream syntax changed from 2.6.0 to 2.7.0 (see below for details)
+* Note to Direct Depackatization Clients : bitstream syntax changed from Motive 1.6 to Motive 1.7 (NatNet v2.7.0) (see below for details)
 
 Added:   Motive 1.7 streaming support
 

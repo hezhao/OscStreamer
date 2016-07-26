@@ -2,7 +2,7 @@
 NatNetTypes defines the public, common data structures and types
 used when working with NatNetServer and NatNetClient objects.
 
-version 2.8.0.0
+version 2.10.0.0
 */
 
 #pragma once
@@ -31,6 +31,10 @@ version 2.8.0.0
 #define MAX_LABELED_MARKERS         1000    // maximum number of labeled markers per frame
 #define MAX_UNLABELED_MARKERS       1000    // maximum number of unlabeled (other) markers per frame
 
+#define MAX_FORCEPLATES             8       // maximum number of force plates
+#define MAX_ANALOG_CHANNELS         32      // maximum number of data channels (signals) per analog/force plate device
+#define MAX_ANALOG_SUBFRAMES        30      // maximum number of analog/force plate frames per mocap frame
+
 #define MAX_PACKETSIZE				100000	// max size of packet (actual packet size is dynamic)
 
 // Client/server message ids
@@ -44,6 +48,8 @@ version 2.8.0.0
 #define NAT_FRAMEOFDATA             7
 #define NAT_MESSAGESTRING           8
 #define NAT_DISCONNECT              9 
+#define NAT_KEEPALIVE               10
+#define NAT_DISCONNECTBYTIMEOUT     11
 #define NAT_UNRECOGNIZED_REQUEST    100
 
 #define UNDEFINED                   999999.9999
@@ -88,11 +94,11 @@ typedef enum DataDescriptors
 {
     Descriptor_MarkerSet = 0,
     Descriptor_RigidBody,
-    Descriptor_Skeleton
+    Descriptor_Skeleton,
+    Descriptor_ForcePlate
 } DataDescriptors;
 
 typedef float MarkerData[3];                // posX, posY, posZ
-
 
 // sender
 typedef struct
@@ -206,6 +212,21 @@ typedef struct
     sRigidBodyData* RigidBodyData;                           // Array of RigidBody data
 } sSkeletonData;
 
+typedef struct
+{
+    int ID;                                         // used for order, and for identification in the data stream
+    char strSerialNo[128];                          // for unique plate identification
+    float fWidth;                                   // plate physical width (manufacturer supplied)
+    float fLength;                                  // plate physical length (manufacturer supplied)
+    float fOriginX, fOriginY, fOriginZ;             // electrical center offset (from electrical center to geometric center-top of force plate) (manufacturer supplied)
+    float fCalMat[12][12];                          // force plate calibration matrix (for raw analog voltage channel type only)
+    float fCorners[4][3];                           // plate corners, in world (aka Mocap System) coordinates, clockwise from plate +x,+y (refer to C3D spec for details)
+    int iPlateType;                                 // force plate 'type' (refer to C3D spec for details) 
+    int iChannelDataType;                           // 0=Calibrated force data, 1=Raw analog voltages
+    int nChannels;                                  // # of channels (signals)
+    char szChannelNames[MAX_ANALOG_CHANNELS][MAX_NAMELENGTH];   // channel names
+} sForcePlateDescription;
+
 // Tracked Object data description.  
 // A Mocap Server application (e.g. Arena or TrackingTools) may contain multiple
 // tracked "objects (e.g. RigidBody, MarkerSet).  Each object will have its
@@ -215,10 +236,11 @@ typedef struct
     int type;
     union
     {
-        sMarkerSetDescription* MarkerSetDescription;
-        sRigidBodyDescription* RigidBodyDescription;
-        sSkeletonDescription*  SkeletonDescription;
-    } Data;									
+        sMarkerSetDescription*  MarkerSetDescription;
+        sRigidBodyDescription*  RigidBodyDescription;
+        sSkeletonDescription*   SkeletonDescription;
+        sForcePlateDescription* ForcePlateDescription;
+    } Data;
 } sDataDescription;
 
 // All data descriptions for current session (as defined by host app)
@@ -228,24 +250,42 @@ typedef struct
     sDataDescription arrDataDescriptions[MAX_MODELS];
 } sDataDescriptions;
 
+
+typedef struct
+{
+    int nFrames;                                    // # of analog frames of data in this channel data packet (typically # of subframes per mocap frame)
+    float Values[MAX_ANALOG_SUBFRAMES];             // values
+} sAnalogChannelData;
+
+typedef struct
+{
+    int ID;                                         // ForcePlate ID (from data description)
+    int nChannels;                                  // # of channels (signals) for this force plate
+    sAnalogChannelData ChannelData[MAX_ANALOG_CHANNELS];// Channel (signal) data (e.g. Fx[], Fy[], Fz[])
+    short params;                                   // Host defined flags
+} sForcePlateData;
+
 // Single frame of data (for all tracked objects)
 typedef struct
 {
-    int iFrame;                                 // host defined frame number
-    int nMarkerSets;                            // # of marker sets in this frame of data
-    sMarkerSetData MocapData[MAX_MODELS];       // MarkerSet data
-    int nOtherMarkers;                          // # of undefined markers
-    MarkerData* OtherMarkers;                   // undefined marker data
-    int nRigidBodies;                           // # of rigid bodies
-    sRigidBodyData RigidBodies[MAX_RIGIDBODIES];// Rigid body data
-    int nSkeletons;                             // # of Skeletons
-    sSkeletonData Skeletons[MAX_SKELETONS];     // Skeleton data
-    int nLabeledMarkers;                        // # of Labeled Markers
-    sMarker LabeledMarkers[MAX_LABELED_MARKERS];// Labeled Marker data (labeled markers not associated with a "MarkerSet")
-    float fLatency;                             // host defined time delta between capture and send
-    unsigned int Timecode;                      // SMPTE timecode (if available)
-    unsigned int TimecodeSubframe;              // timecode sub-frame data
-    double fTimestamp;                          // FrameGroup timestamp
-    short params;                               // host defined parameters
-
+    int iFrame;                                     // host defined frame number
+    int nMarkerSets;                                // # of marker sets in this frame of data
+    sMarkerSetData MocapData[MAX_MODELS];           // MarkerSet data
+    int nOtherMarkers;                              // # of undefined markers
+    MarkerData* OtherMarkers;                       // undefined marker data
+    int nRigidBodies;                               // # of rigid bodies
+    sRigidBodyData RigidBodies[MAX_RIGIDBODIES];    // Rigid body data
+    int nSkeletons;                                 // # of Skeletons
+    sSkeletonData Skeletons[MAX_SKELETONS];         // Skeleton data
+    int nLabeledMarkers;                            // # of Labeled Markers
+    sMarker LabeledMarkers[MAX_LABELED_MARKERS];    // Labeled Marker data (labeled markers not associated with a "MarkerSet")
+    int nForcePlates;                               // # of force plates
+    sForcePlateData ForcePlates[MAX_FORCEPLATES];   // Force plate data
+    float fLatency;                                 // host defined time difference between capture and send, not necessarily frame accurate.
+    unsigned int Timecode;                          // SMPTE timecode (if available)
+    unsigned int TimecodeSubframe;                  // timecode sub-frame data
+    double fTimestamp;                              // FrameGroup timestamp
+    short params;                                   // host defined parameters
 } sFrameOfMocapData;
+
+
