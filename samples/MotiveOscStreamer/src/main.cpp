@@ -19,8 +19,6 @@ using namespace std;
 
 INITIALIZE_EASYLOGGINGPP
 
-#define NUM_OF_CAMERAS 8
-
 vector<RigidBody> rigidbodies;
 
 void printRigidBodies()
@@ -73,13 +71,6 @@ int main(int argc, char *argv[])
 	tracker->init();
 	
 	int nCameras = tracker->getNumberOfCameras();
-	if (nCameras != NUM_OF_CAMERAS) {
-		cerr << "Error: " << nCameras << " cameras detected, " << NUM_OF_CAMERAS << " required." << endl;
-		cerr << "Press any key to exit..." << endl;
-		_getch();
-		return -1;
-	}
-
 	LOG(INFO) << "Number of cameras: " << nCameras;
 	for (int i = 0; i < nCameras; ++i) {
 		LOG(INFO) << "Camera name (" << i << "): " << tracker->getNameOfCamera(i);
@@ -104,7 +95,7 @@ int main(int argc, char *argv[])
 	}
 
 	oscStreamer->init();
-		
+
 	thread t1(streamRigidBodies, tracker, oscStreamer);
 	thread t2(printRigidBodies);
 
