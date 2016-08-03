@@ -36,6 +36,8 @@ class Motive
 		int isInitialized() const { return m_initialized; }
 		int terminate();
 		void setProjectFile(std::string filename) { m_projectFile = filename; }
+		bool loadRigidBodies(std::string filename);
+		bool removeRigidBody(int index);
 		bool update();
 		bool updateSingleFrame();
 		bool isRigidBodyTracked(int index) const;

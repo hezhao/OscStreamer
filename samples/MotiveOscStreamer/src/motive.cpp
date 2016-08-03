@@ -44,6 +44,20 @@ int Motive::terminate() {
 	return 0;
 }
 
+bool Motive::loadRigidBodies(std::string filename) {
+	if (TT_LoadRigidBodies(filename.c_str()) == NPRESULT_SUCCESS) {
+		return true;
+	}
+	return false;
+}
+
+bool Motive::removeRigidBody(int index) {
+	if(TT_RemoveRigidBody(index) == NPRESULT_SUCCESS) {
+		return true;
+	}
+	return false;
+}
+
 double Motive::getTimeStamp() const {
 	if (m_initialized) {
 		return TT_FrameTimeStamp();
