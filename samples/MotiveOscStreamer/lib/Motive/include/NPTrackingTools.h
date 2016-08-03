@@ -4,11 +4,12 @@
 //==
 //== The Motive API is designed to be a simple yet full featured interface to Motive
 //====================================================================================-----
+#pragma once
 #ifndef NPTRACKINGTOOLS_H
 #define NPTRACKINGTOOLS_H
 
 //== Includes ========================================================================-----
-#include "RigidBodySettings.h"
+#include "RigidBodySolver/RigidBodySettings.h"
 
 //== DLL EXPORT/IMPORT PREPROCESSOR DEFINES ==========================================-----
 
@@ -138,7 +139,7 @@ namespace Core
         T               X;        //== Position in meters ==
         T               Y;        //== Position in meters ==
         T               Z;        //== Position in meters ==
-        T               Size;     //== Diameter in meters ======
+        T               Size;     //== Diameter in meters ==
         cUID            ID;       //== Marker Label ========
         bool            Selected;
         T               Residual; //== Residual in mm/ray ==
@@ -340,7 +341,7 @@ public:
         ePCSmallMarkerOptimization = 1LL << 43, // long
         eBlockWidth = 1LL << 44,                // double
         eBlockHeight = 1LL << 45,               // double
-        ePointCloudEngine = 1LL << 46,          // long 1=v1.0  2=v2.0
+        ePointCloudEngine = 1LL << 46,          // long 1=v1.0  2=v2.0, etc.
         eSynchronizerEngine = 1LL << 47,        // long 1=v1.0  2=v2.0
         eMarkerDiameterType = 1LL << 48,        // long
         eMarkerDiameterForceSize = 1LL << 49,   // double
@@ -493,6 +494,19 @@ TTAPI  bool      TT_ClearCameraMask(int cameraIndex);
 TTAPI  bool      TT_SetCameraMask(int cameraIndex, unsigned char * buffer, int bufferSize);
 TTAPI  bool      TT_CameraMask(int cameraIndex, unsigned char * buffer, int bufferSize);
 TTAPI  bool      TT_CameraMaskInfo(int cameraIndex, int &blockingMaskWidth, int &blockingMaskHeight, int &blockingMaskGrid);
+
+//== Camera State ==--
+
+enum eCameraStates
+{
+    Camera_Enabled = 0,
+    Camera_Disabled_For_Reconstruction = 1,
+    Camera_Disabled = 2,
+    CameraStatesCount = 3
+};
+
+TTAPI  bool      TT_SetCameraState( int cameraIndex, eCameraStates state );
+TTAPI  bool      TT_CameraState( int cameraIndex, eCameraStates &currentState );
 
 //== Camera ID ==--
 TTAPI   int      TT_CameraID(int cameraIndex);
