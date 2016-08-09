@@ -46,11 +46,6 @@ void streamRigidBodies(Motive *tracker, OscStreamer *oscStreamer)
 				rigidbodies.push_back(r);
 			}
 		}
-		if (char c =_getch()) {
-			if (c == 'q') {
-				tracker->terminate();
-			}
-		}
 	}
 }
 
