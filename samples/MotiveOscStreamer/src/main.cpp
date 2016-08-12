@@ -38,6 +38,8 @@ void streamRigidBodies(Motive *tracker, OscStreamer *oscStreamer)
 		if (tracker->update() == true) {
 			rigidbodies.clear();
 			for (int i = 0; i < tracker->getNumberOfRigidBodies(); i++) {
+				if ( !tracker->isRigidBodyEnabled(i) )
+					continue;
 				RigidBody r;
 				tracker->getPositionAndOrientation(i, r.x, r.y, r.z, r.qx, r.qy, r.qz, r.qw, r.yaw, r.pitch, r.roll);
 				int ID = tracker->getRigidBodyID(i);

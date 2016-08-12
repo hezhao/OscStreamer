@@ -36,12 +36,16 @@ class Motive
 		int isInitialized() const { return m_initialized; }
 		int terminate();
 		void setProjectFile(std::string filename) { m_projectFile = filename; }
+		int enableRigidBody(int index);
+		int disableRigidBody(int index);
+		bool isRigidBodyEnabled(int index);
 		bool loadRigidBodies(std::string filename);
 		bool removeRigidBody(int index);
 		bool update();
 		bool updateSingleFrame();
 		bool isRigidBodyTracked(int index) const;
 		int getRigidBodyID(int index) const;
+		void setRigidBodyID(int index, int ID);
 		void getPositionAndOrientation(int index, float& x, float& y, float& z, float& qx, float& qy, float& qz, float& qw, float& yaw, float& pitch, float& roll) const;
 		double getTimeStamp() const;
 		int getNumberofMarkers() const;
