@@ -14,6 +14,7 @@
 
 struct RigidBody
 {
+	int id;
 	float x;
 	float y;
 	float z;
@@ -24,7 +25,7 @@ struct RigidBody
 	float yaw;
 	float pitch;
 	float roll;
-	RigidBody() : x(0.0), y(0.0), z(0.0), qx(0.0), qy(0.0), qz(0.0), yaw(0.0), pitch(0.0), roll(0.0) {}
+	RigidBody() : id(0), x(0.0), y(0.0), z(0.0), qx(0.0), qy(0.0), qz(0.0), yaw(0.0), pitch(0.0), roll(0.0) {}
 };
 
 class Motive 
