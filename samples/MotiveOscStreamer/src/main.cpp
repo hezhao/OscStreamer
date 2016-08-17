@@ -27,7 +27,7 @@ void printRigidBodies()
 		this_thread::sleep_for(chrono::milliseconds(100));
 		for (int i = 0; i < rigidbodies.size(); i++) {
 			RigidBody &r = rigidbodies[i];
-			LOG(INFO) << "Rigid Body " << r.id << setprecision(4) << fixed << " x: " << r.x << ", y: " << r.y << ", z: " << r.z;
+			LOG(INFO) << "Rigid Body " << r.ID << setprecision(4) << fixed << " x: " << r.x << ", y: " << r.y << ", z: " << r.z;
 		}
 	}
 }
@@ -41,10 +41,10 @@ void streamRigidBodies(Motive *tracker, OscStreamer *oscStreamer)
 				if ( !tracker->isRigidBodyEnabled(i) )
 					continue;
 				RigidBody r;
-				r.id = tracker->getRigidBodyID(i);
+				r.ID = tracker->getRigidBodyID(i);
 				tracker->getPositionAndOrientation(i, r.x, r.y, r.z, r.qx, r.qy, r.qz, r.qw, r.yaw, r.pitch, r.roll);
 				bool isTracked = tracker->isRigidBodyTracked(i);
-				oscStreamer->send(r.id, isTracked, r.x, r.y, r.z, r.qx, r.qy, r.qz, r.qw);
+				oscStreamer->send(r.ID, isTracked, r.x, r.y, r.z, r.qx, r.qy, r.qz, r.qw);
 				rigidbodies.push_back(r);
 			}
 		}

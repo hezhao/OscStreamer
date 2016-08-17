@@ -112,21 +112,21 @@ int Motive::getNumberOfRigidBodies() const
 	return 0;
 }
 
-std::string Motive::getNameOfCamera(int id) const
+std::string Motive::getNameOfCamera(int index) const
 {
 	if (m_initialized) {
-		if (id <= TT_CameraCount()) {
-			return std::string(TT_CameraName(id));
+		if (index <= TT_CameraCount()) {
+			return std::string(TT_CameraName(index));
 		}
 	}
 	return std::string("");
 }
 
-std::string Motive::getNameOfRigidBody(int id) const
+std::string Motive::getNameOfRigidBody(int index) const
 {
 	if (m_initialized) {
-		if (id <= TT_RigidBodyCount()) {
-			return std::string(TT_RigidBodyName(id));
+		if (index <= TT_RigidBodyCount()) {
+			return std::string(TT_RigidBodyName(index));
 		}
 	}
 	return std::string("");

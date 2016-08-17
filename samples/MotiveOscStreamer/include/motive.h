@@ -14,7 +14,7 @@
 
 struct RigidBody
 {
-	int id;
+	int ID;
 	float x;
 	float y;
 	float z;
@@ -25,7 +25,7 @@ struct RigidBody
 	float yaw;
 	float pitch;
 	float roll;
-	RigidBody() : id(0), x(0.0), y(0.0), z(0.0), qx(0.0), qy(0.0), qz(0.0), yaw(0.0), pitch(0.0), roll(0.0) {}
+	RigidBody() : ID(0), x(0.0), y(0.0), z(0.0), qx(0.0), qy(0.0), qz(0.0), yaw(0.0), pitch(0.0), roll(0.0) {}
 };
 
 class Motive 
@@ -52,8 +52,8 @@ class Motive
 		int getNumberofMarkers() const;
 		int getNumberOfCameras() const;
 		int getNumberOfRigidBodies() const;
-		std::string getNameOfCamera(int id) const;
-		std::string getNameOfRigidBody(int id) const;
+		std::string getNameOfCamera(int index) const;
+		std::string getNameOfRigidBody(int index) const;
 	protected:
 		int checkResult(int result);
 		std::string m_projectFile;
